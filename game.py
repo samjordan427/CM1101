@@ -16,16 +16,12 @@ def remove_punct(text):
     ' Hey  Yes'
     >>> remove_punct(",go!So.?uTh")
     'goSouTh'
-    
-    punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
-    no_punct = ""
-    for char in user_input:
-       if char not in punctuations:
-           no_punct = no_punct + char
-    
+    """
+    text2 = ""
+    discard = set(string.punctuation)
+    text2 = "".join(char for char in text if char not in discard)
+    return text2
    
-    return user_input
-   """
 def remove_spaces(text):
     """This function is used to remove leading and trailing spaces from a string.
     It takes a string and returns a new string with does not have leading and
@@ -41,8 +37,8 @@ def remove_spaces(text):
     ''
     >>> remove_spaces("   ")
     ''
-    return text.strip()
     """
+    return text.strip()
     
 
 def normalise_input(user_input):
@@ -56,12 +52,12 @@ def normalise_input(user_input):
     'take lamp'
     >>> normalise_input("HELP!!!!!!!")
     'help'
-   
-    text = user_input
-    remove_punct(text)
-    remove_spaces(text)
-    print(text.lower())
-     """
+    """
+    text = ""
+    text2 = remove_punct(user_input)
+    text = remove_spaces(text2)
+    return text.lower()
+    
     
 def display_room(rooms):
     """This function takes a room as an input and nicely displays its name
@@ -101,14 +97,15 @@ def exit_leads_to(exits, direction):
     >>> exit_leads_to(rooms["Tutor"]["exits"], "west")
     'Reception'
     """
-    if direction == "north":
-        print(exits["north"])
-    elif direction == "east":
-        print(exits["east"])
-    elif direction == "south":
-        print(exits["south"])
-    elif direction == "west":
-        print(exits["west"])
+    return rooms[exits[direction]]["name"]
+    # if direction == "north":
+    #    print(exits["north"])
+    #elif direction == "east":
+     #   print(exits["east"])
+   # elif direction == "south":
+    #    print(exits["south"])
+    #elif direction == "west":
+     #   print(exits["west"])
     
     
 
@@ -120,11 +117,12 @@ def print_menu_line(direction, leads_to):
     Go <EXIT NAME UPPERCASE> to <where it leads>.
 
     For example:
-    >>> print_menu_line("east", "your personal tutor's office")
-
-    Go EAST to you personal tutor's office                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           >>> print_menu_line("south", "MJ and Simon's room")
-    Go SOUTH to MJ and Simon's room
+    >>> print_menu_line("east", "you personal tutor's office")
+    Go EAST to you personal tutor's office.
+    >>> print_menu_line("south", "MJ and Simon's room")
+    Go SOUTH to MJ and Simon's room.
     """
+
     print("Go " + direction.upper() + " to " + leads_to + ".")
     
     
@@ -145,15 +143,16 @@ def print_menu(exits):
     Go SOUTH to MJ and Simon's room.
     Where do you want to go?
     """
-    counter = 0
-    length = len(exits)
-    
+
     print("You can:")
 
-    while counter < (length -1):
-        print(counter)
-        print("Go " + exits["south"] + " to " + rooms["exits"])
-        counter = counter + 1
+    for direction in exits:
+        
+        print_menu_line(direction, exit_leads_to(exits, direction))
+   # while counter < (length -1):
+    #    print(counter)
+     #   print("Go " + exits["south"] + " to " + rooms["exits"])
+      #  counter = counter + 1
         # print(exits[counter])
         #print(print_menu_line(exits[counter]) + exit_leads_to(exits, direction))
 
@@ -177,7 +176,7 @@ def is_valid_exit(exits, user_input):
     True
     """
 
-    print(exits)
+    return user_input in exits
     
 
 
@@ -197,12 +196,14 @@ def menu(exits):
         # COMPLETE THIS PART:
         
         # Display menu
-
+        print_menu(exits)
         # Read player's input
-
+        user_input = input("> ")
         # Normalise the input
-
+        normalised_user_input = normalise_input(user_input)
         # Check if the input makes sense (is valid exit)
+        if is_valid_exit(exits, user_input) == True:
+            return user_input
             # If so, return the player's choice
 
 
@@ -220,7 +221,7 @@ def move(exits, direction):
     >>> move(rooms["Reception"]["exits"], "west") == rooms["Office"]
     False
     """
-    pass
+    return rooms[exits[direction]]
 
 
 # This is the entry point of our program
