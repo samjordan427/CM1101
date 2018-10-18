@@ -203,7 +203,9 @@ def menu(exits):
         normalised_user_input = normalise_input(user_input)
         # Check if the input makes sense (is valid exit)
         if is_valid_exit(exits, user_input) == True:
-            return user_input
+            return normalised_user_input
+        else:
+            print("Please choose another exit")
             # If so, return the player's choice
 
 
@@ -230,7 +232,7 @@ def main():
     current_room = rooms["Reception"]
 
     # Main game loop
-"""    while True:
+    while True:
         # Display game status (room description etc.)
         display_room(current_room)
 
@@ -242,7 +244,7 @@ def main():
 
         # Move the protagonist, i.e. update the current room
         current_room = move(exits, direction)
-"""
+
 
 # Are we being run as a script? If so, run main().
 # '__main__' is the name of the scope in which top-level code executes.
